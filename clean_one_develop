@@ -1,0 +1,38 @@
+#!/bin/bash
+
+
+path=${1/#\~/$HOME}
+
+cd $path
+
+git fetch
+
+develop_tag=`git describe --exact-match origin/develop`
+master_tag=`git describe --exact-match origin/master`
+
+
+develop_version=`echo $develop_tag | sed -E s/\(.*\)\.beta[0-9]*/\\\1/`
+master_version=`echo $master_tag | sed -E s/\(.*\).gm/\\\1/`
+
+if [ "$develop_version" == "$master_version" ]; then 
+    git checkout master
+    rm -r * || true
+    git reset --hard
+    git pull -r
+    git branch -D develop
+    git checkout --orphan develop
+    git add -A 
+    git commit -am "Init with master"
+    git push --force
+
+    tags=`git tag | grep beta`
+
+    for tag in $tags; do
+        git push origin :refs/tags/$tag
+    done
+    echo "success"
+    exit 1
+else
+    echo "fail"
+    exit 0
+fi

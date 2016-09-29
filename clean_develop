@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -e
+
+work_path=`dirname $0`
+
+for path in `cat clean_work.cfg | grep -v '#'`; do
+    bin_name=`basename $path`
+    
+    echo "********************************************"
+    echo "Cleaning $bin_name"
+    echo "********************************************"
+
+    $work_path/clean_one_develop $path
+    echo 
+done
