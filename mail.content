@@ -1,0 +1,6 @@
+BIN_NAME已经移除了其中的develop tag，并且清理了develop分支的历史。负责该积木的DEV和PM请删除自己本地的develop分支并重新从远程拉取分支
+
+同时请清理本地的所有tag并从远程重新拉取。
+命令行命令为：
+git tag -l | xargs git tag -d
+git fetch --tags
