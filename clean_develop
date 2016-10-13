@@ -4,7 +4,7 @@ set -e
 
 work_path=`dirname $0`
 
-for path in `cat clean_work.cfg | grep -v '#'`; do
+for path in `cat bin.cfg | grep -v '#'`; do
     bin_name=`basename $path`
     
     echo "********************************************"

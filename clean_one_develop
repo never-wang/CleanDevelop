@@ -2,10 +2,24 @@
 
 
 path=${1/#\~/$HOME}
+    
+bin_name=`basename $path`
+work_path=$PWD/`dirname $0`
 
 cd $path
 
 git fetch
+
+
+first_commit_interval=$(((`date +%s` - `git log origin/develop --reverse --format="%ct" | head -1`) / 24 / 3600))
+commit_number=`git log --format='%h' | wc -l`
+
+if [ $first_commit_interval -gt 60 -o $commit_number -gt 10 ]; then
+    echo "Need to remove develop"
+else
+    echo "No need to remove develop"
+    exit
+fi
 
 develop_tag=`git describe --exact-match origin/develop`
 master_tag=`git describe --exact-match origin/master`
@@ -30,9 +44,12 @@ if [ "$develop_version" == "$master_version" ]; then
     for tag in $tags; do
         git push origin :refs/tags/$tag
     done
-    echo "success"
-    exit 1
+    echo "Success"
+    
+    title=`echo "BIN_NAME项目develop分支清理通知" | sed s/BIN_NAME/$bin_name/`
+    cat $work_path/mail.content | sed s/BIN_NAME/$bin_name/ | mail -s "$title" `cat $work_path/mail.recipient`
+    echo "Send mail"
 else
-    echo "fail"
+    echo "Fail"
     exit 0
 fi
