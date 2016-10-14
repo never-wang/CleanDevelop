@@ -4,7 +4,8 @@
 path=${1/#\~/$HOME}
     
 bin_name=`basename $path`
-work_path=$PWD/`dirname $0`
+work_path=`dirname $0`
+work_path=`cd $work_path; pwd`
 
 cd $path
 
@@ -47,7 +48,7 @@ if [ "$develop_version" == "$master_version" ]; then
     echo "Success"
     
     title=`echo "BIN_NAME项目develop分支清理通知" | sed s/BIN_NAME/$bin_name/`
-    cat $work_path/mail.content | sed s/BIN_NAME/$bin_name/ | mail -s "$title" `cat $work_path/mail.recipient`
+    cat "$work_path/mail.content" | sed s/BIN_NAME/$bin_name/ | mail -s "$title" `cat "$work_path/mail.recipient"`
     echo "Send mail"
 else
     echo "Fail"

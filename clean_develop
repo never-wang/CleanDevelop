@@ -3,14 +3,18 @@
 set -e
 
 work_path=`dirname $0`
+work_path=`cd $work_path; pwd`
 
-for path in `cat bin.cfg | grep -v '#'`; do
+output=$work_path/Log/`date +"%Y-%m-%d"`.log 
+
+mkdir -p $work_path/Log 
+
+for path in `cat "$work_path"/bin.cfg | grep -v '#'`; do
     bin_name=`basename $path`
-    
-    echo "********************************************"
-    echo "Cleaning $bin_name"
-    echo "********************************************"
+    echo "********************************************" >> $output
+    echo "Cleaning $bin_name" >> $output
+    echo "********************************************" >> $output
 
-    $work_path/clean_one_develop $path
-    echo 
+    "$work_path"/clean_one_develop $path >> $output 2>>$output
+    echo >> $output
 done
