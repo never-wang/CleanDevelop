@@ -11,9 +11,9 @@ cd $path
 
 git fetch
 
-
 first_commit_interval=$(((`date +%s` - `git log origin/develop --reverse --format="%ct" | head -1`) / 24 / 3600))
 commit_number=`git log --format='%h' | wc -l`
+
 
 if [ $first_commit_interval -gt 60 -o $commit_number -gt 10 ]; then
     echo "Need to remove develop"
@@ -22,8 +22,9 @@ else
     exit
 fi
 
-develop_tag=`git describe --exact-match origin/develop`
-master_tag=`git describe --exact-match origin/master`
+develop_tag=`git describe --exact-match --tags origin/develop`
+
+master_tag=`git describe --exact-match --tags origin/master`
 
 
 develop_version=`echo $develop_tag | sed -E s/\(.*\)\.beta[0-9]*/\\\1/`
