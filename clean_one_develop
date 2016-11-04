@@ -44,6 +44,7 @@ if [ "$develop_version" == "$master_version" ]; then
     tags=`git tag | grep beta`
 
     for tag in $tags; do
+        git tag -d $tag
         git push origin :refs/tags/$tag
     done
     echo "Success"
