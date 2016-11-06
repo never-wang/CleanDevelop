@@ -15,7 +15,7 @@ first_commit_interval=$(((`date +%s` - `git log origin/develop --reverse --forma
 commit_number=`git log --format='%h' | wc -l`
 
 
-if [ $first_commit_interval -gt 60 -o $commit_number -gt 10 ]; then
+if [ $first_commit_interval -gt 60 -a $commit_number -gt 10 ]; then
     echo "Need to remove develop"
 else
     echo "No need to remove develop"
